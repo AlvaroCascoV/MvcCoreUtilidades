@@ -14,6 +14,10 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+/*-------------------añadido---------------------*/
+//para usar wwwroot para subir ficheros al proyecto
+app.UseStaticFiles();
+/*-----------------------------------------------*/
 app.UseRouting();
 
 app.UseAuthorization();
