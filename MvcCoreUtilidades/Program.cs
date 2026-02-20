@@ -7,6 +7,9 @@ builder.Services.AddControllersWithViews();
 /*-------------------añadido---------------------*/
 //Añadimos el servicio de nuestro helper
 builder.Services.AddSingleton<HelperPathProvider>();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddMemoryCache();
+/*-----------------------------------------------*/
 
 var app = builder.Build();
 
