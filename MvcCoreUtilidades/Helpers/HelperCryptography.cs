@@ -5,6 +5,51 @@ namespace MvcCoreUtilidades.Helpers
 {
     public class HelperCryptography
     {
+        //CREAMOS UN STRING PARA EL SALT
+        public static string Salt { get; set; }
+        //METODO PARA GENERAR UN SALT ALEATORIO
+        private static string GenerateSalt()
+        {
+            Random random = new Random();
+            string salt = "";
+            for (int i = 1; i <= 30; i++)//i es el tamaño del salt
+            {
+                //GENERAMOS UN ALEATORIO ASCII
+                int num = random.Next(1, 255);
+                char letra = Convert.ToChar(num);
+                salt += letra;
+            }
+            return salt;
+        }
+
+        //CREAMOS UN METODO EFICIENTE PARA EL CIFRADO
+        public static string CifrarContenido(string contenido, bool comparar)
+        {
+            if (comparar == false)
+            {
+                //SI NO QUIERO COMPARAR, CREAMOS UN NUEVO SALT
+                Salt = GenerateSalt();
+            }
+            //REALIZAMOS EL CIFRADO
+            string contenidoSalt = contenido + Salt;
+            //UTILIZAMOS EL OBJETO GRANDE PARA CIFRAR
+            SHA512 managed = SHA512.Create();
+            UnicodeEncoding encoding = new UnicodeEncoding();
+            byte[] salida;
+            salida = encoding.GetBytes(contenidoSalt);
+            //REALIZAR n ITERACIONES SOBRE EL PROPIO CIFRADO
+            for (int i = 1; i <= 21; i++)
+            {
+                //CIFRADO SOBRE CIFRADO
+                salida = managed.ComputeHash(salida);
+            }
+            //DEBEMOS LIBERAR LA MEMORIA
+            managed.Clear();
+
+            string resultado = encoding.GetString(salida);
+            return resultado;
+        }
+
         //CREAMOS LOS METODOS DE TIPO STATIC
         //SIMPLEMENTE DEVOLVEMOS UN TEXTO CIFRADO SIMPLE
         public static string EncriptarTextoBasico(string contenido)
